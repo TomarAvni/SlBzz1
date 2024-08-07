@@ -50,7 +50,7 @@ class GoogleSheetLogger:
 def main():
     ecoflow = EcoFlowAPI()
     logger = GoogleSheetLogger(
-        credentials_file="solbazzproject-b828eca61f89.json",
+        credentials_file="solbazz2-eefe7285c1bb.json",
         sheet_name='SolBazz_test_1'
     )
 
