@@ -55,16 +55,21 @@ def main():
     )
 
     while True:
-        try:
-            # Log data
-            current_time = datetime.now(pytz.timezone('Asia/Jerusalem'))
-            data = ecoflow.get_data()
-            date = current_time.strftime("%Y-%m-%d")
-            time_str = current_time.strftime("%H:%M:%S")
-            logger.log_data(date, time_str, data['soc'], data['wattsInSum'], data['wattsOutSum'])
-            print("Data logged successfully")
-        except Exception as e:
-            print(f"Error: {e}")
+        current_time = datetime.now(pytz.timezone('Asia/Jerusalem'))
+        current_hour = current_time.hour
+
+        if 6 <= current_hour < 20:
+            try:
+                # Log data
+                data = ecoflow.get_data()
+                date = current_time.strftime("%Y-%m-%d")
+                time_str = current_time.strftime("%H:%M:%S")
+                logger.log_data(date, time_str, data['soc'], data['wattsInSum'], data['wattsOutSum'])
+                print("Data logged successfully")
+            except Exception as e:
+                print(f"Error: {e}")
+        else:
+            print("Outside of operating hours. Waiting until the next check.")
 
         # Pause for 59 seconds
         time.sleep(59)
