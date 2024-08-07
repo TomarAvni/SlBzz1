@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "solbazzproject",
+  "private_key_id": "b828eca61f890881bab556c6c0e6fc604846d8d7",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDFXHCaw973J3Hm\nNpkleElEomPIsYvEVuKDGJWfLEBhHRDWTiS3Rj63LoHXWvk3zC7roWyZP/5Oco8l\neYuyzYlFbAmpiDmliqQd0NxyDSe5dbcokF2UdFbOJLyfFZlSzWh4jIvXDxgu08za\nJbdVjFDwiiOcgTCWCRXyezYH8Xzs7xEKxmCuayt61oNlBz5s7yQXpVz+T04XD9M/\nrv5VkpXM0Xb6oKAAEeFR/S1TgnxhTN4N/ZNS9EUtwbNvEeticrDDvnAy/jU7tjAV\nxUID5mg6agI9h1xuPFDCXEIMjTC6QJelKu9tHZBdKjJcuSJMo+2CvNoKcK7xJetp\nm3H96NcZAgMBAAECggEAFqJPV7B29alUaq6AScfNv01QXEfgW5gLSjWbkzGkAH8w\n2yMDGvG3Z5Kx2VzZkAieqO9OYRTxuVVyDT4vQ0ZHI+sMAKFa2x1XTQQTBBF2KNLT\nOpez476j5ehYqXX0q4ZbINgdgYB9qYEo0SvaJrl83tk41E4MoGhSWAjBXY/YX+On\nGAP6wU9gCEZFnMxmq7kcZR9F6GJakQlGdFHQxcJiUGufxPX7TTRGWcTJi7YiQGV5\nEHb43xhxTzboNeqnB1eCSjIISouLqRIUG1RiFuEQONdKK49/KogqKNAtjXWJT579\noGnesuadLOoDYdWBud+KEyZrN9/IkFGZbOKBlb3msQKBgQD6l84+kp3bMsZTjupT\neVmwI7mniY4rQ7d+UJUfkcqK5IIcRF3eBSDumF9om0ZrcGzu5a1IlfyH8F9ORQ2O\njAD7ZMOjpMGs7CpqDhlDiz3ol6yK+Z+fz9xbKmVTtOHKmo+TI+dMrwX8OHBVpJ4n\nmtpjB8Y1ADyBF4o8oIPf4/BMPwKBgQDJnpk2xghlrvv1a4CqXkTt80A2WnNgkHSN\nJdyGFdQHisgPE8zDO/GCHncZTzPTIwV8yKuHbpVbs6K4pyBlfUFJaKRWJBvlNQ5B\nAld5qOq+PhLJmFGkBp+PppljUbS0j2ZzSmAkAra1IVj7yaaBu2raorrA5Dni6b9R\npava2LpmpwKBgQCnjsvkQQr2H3xHMN90E0cqJKkl4i9CtJPEDUO5CTXiKyrolboi\nE1HS1+Wrv2+VtWXRU5fLWiayCsLfRgLrlqetcNHz4N1zr7IomebAqCEsHgbMIl9e\nb5FLEA0SrHbxjumDnFUzjDA3VtGeImVx2/Q8lV0t4UuTkdbn9PhYw0PQ5wKBgQC/\nl+009b8pEb3xHDVqsKaEEHJmtFGL4/o930rOSJPyjtlKKqCcrqvz4IuBC5jN/SvL\nxs3ppxZbzDrHilno17xgzAXOrgWsLFzdPiJuRCy+mDI2TH7Yhkq+sax1i0FTjCnp\nSTZPQhzpx0TOEHQgOD90gMtDXh38GfBq4CqNjwKjZQKBgAk+L+YK2v8TnJ/067Io\niNhDgvIM/hDabraW07IOe9Sysa1SNNcfqVlau1aEc49QQQniQHYiylAZK9lV1JAs\n99+Tb0ZXciyUuwFWCJ9TM95BkR7FYCTuC3NudQyAcU7LYtMtiYwytxDERr8AqSCi\nwABnwssqTdbh97o2X3oBgTV8\n-----END PRIVATE KEY-----\n",
+  "client_email": "solbazz@solbazzproject.iam.gserviceaccount.com",
+  "client_id": "106366079184225155985",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/solbazz%40solbazzproject.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
