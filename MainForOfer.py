@@ -10,7 +10,7 @@ class EcoFlowAPI:
     def __init__(self):
         self.api_key = '9d7b928dd63547a6b4eb9485344bf72f'
         self.secret_key = '232ba90501204986b7bdc8a314bdf5bc'
-        self.serial_number = 'R331ZEB4KF1C2139'
+        self.serial_number = 'R611ZEB5XF2E0465'
         self.base_url = 'https://api.ecoflow.com/iot-service/open/api/device/queryDeviceQuota'
 
     def get_data(self):
