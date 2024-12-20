@@ -57,11 +57,11 @@ def main():
 
     ecoflow = EcoFlowAPI()
     logger_1 = GoogleSheetLogger(
-        credentials_file="solbazz3-12610d034fb5.json",
+        credentials_file="solbazz3-8aaeb6d0ef62.json",
         sheet_name='SolBazz_test_1'
     )
     logger_2 = GoogleSheetLogger(
-        credentials_file="solbazz3-12610d034fb5.json",
+        credentials_file="solbazz3-8aaeb6d0ef62.json",
         sheet_name='SolBazz_test_2'
     )
 
@@ -81,15 +81,19 @@ def main():
                     data = ecoflow.get_data()
                     date = current_time.strftime("%Y-%m-%d")
                     time_str = current_time.strftime("%H:%M:%S")
+                    print(f'{data, time_str}, 1')
                     if use_first_logger:
+                        print(f'{data, time_str}, 2')
                         logger_1.log_data(date, time_str, data['soc'], data['wattsInSum'], data['wattsOutSum'])
                         print(f"Data logged successfully in sheet 1 at {time_str}")
                     else:
+                        print(f'{data, time_str}, 3')
                         logger_2.log_data(date, time_str, data['soc'], data['wattsInSum'], data['wattsOutSum'])
                         print(f"Data logged successfully in sheet 2 at {time_str}")
 
                     # Switch logger after logging twice
                     if current_second == target_second_2:
+                        print(f'{data, time_str}, 4')
                         use_first_logger = not use_first_logger
 
                 except Exception as e:
