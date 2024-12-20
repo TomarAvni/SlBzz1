@@ -57,11 +57,11 @@ def main():
 
     ecoflow = EcoFlowAPI()
     logger_1 = GoogleSheetLogger(
-        credentials_file="solbazz2-eefe7285c1bb.json",
+        credentials_file="solbazz3-12610d034fb5.json",
         sheet_name='SolBazz_test_1'
     )
     logger_2 = GoogleSheetLogger(
-        credentials_file="solbazz2-eefe7285c1bb.json",
+        credentials_file="solbazz3-12610d034fb5.json",
         sheet_name='SolBazz_test_2'
     )
 
