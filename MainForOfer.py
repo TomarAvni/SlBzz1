@@ -8,8 +8,8 @@ import pytz
 
 class EcoFlowAPI:
     def __init__(self):
-        self.api_key = '9d7b928dd63547a6b4eb9485344bf72f'
-        self.secret_key = '232ba90501204986b7bdc8a314bdf5bc'
+        self.api_key = "2e3a969006b1436fad5e36877b6da053"
+        self.secret_key = "ffb0dd5edf3f49d2bd5481b34cd5068f"
         self.serial_number = 'R611ZEB5XF2E0465'
         self.base_url = 'https://api.ecoflow.com/iot-service/open/api/device/queryDeviceQuota'
 
@@ -20,6 +20,8 @@ class EcoFlowAPI:
             'secretKey': self.secret_key
         }
         response = requests.get(url, headers=headers)
+        print(f"Response Status Code: {response.status_code}")
+        print(f"Response Content: {response.text}")  # Debugging log
         data = response.json()
         if data.get('code') == '0' and 'data' in data:
             return {
@@ -52,20 +54,19 @@ def main():
         if not (0 <= target_second_1 <= 59) or not (0 <= target_second_2 <= 59):
             raise ValueError("Invalid second value. Must be between 0 and 59.")
     except ValueError as e:
+        print('im here -2-')
         print(f"Error: {e}")
         return
 
     ecoflow = EcoFlowAPI()
     logger_1 = GoogleSheetLogger(
-        credentials_file="solbazz3-8aaeb6d0ef62.json",
-        sheet_name='SolBazz_test_1'
+        credentials_file="solbazz3-afbe6ca17ca8.json",
+        sheet_name='SolBazz_test_3'
     )
     logger_2 = GoogleSheetLogger(
-        credentials_file="solbazz3-8aaeb6d0ef62.json",
+        credentials_file="solbazz3-afbe6ca17ca8.json",
         sheet_name='SolBazz_test_2'
     )
-
-    use_first_logger = True  # Alternates between loggers
 
     while True:
         current_time = datetime.now(pytz.timezone('Asia/Jerusalem'))
@@ -75,33 +76,34 @@ def main():
 
         # Ensure operation only within allowed hours
         if 5 <= current_hour < 20:
-            if current_second == target_second_1 or current_second == target_second_2:
+            # If current_second matches the first target second, log to the first sheet
+            if current_second == target_second_1:
                 try:
-                    # Log data
                     data = ecoflow.get_data()
                     date = current_time.strftime("%Y-%m-%d")
                     time_str = current_time.strftime("%H:%M:%S")
-                    print(f'{data, time_str}, 1')
-                    if use_first_logger:
-                        print(f'{data, time_str}, 2')
-                        logger_1.log_data(date, time_str, data['soc'], data['wattsInSum'], data['wattsOutSum'])
-                        print(f"Data logged successfully in sheet 1 at {time_str}")
-                    else:
-                        print(f'{data, time_str}, 3')
-                        logger_2.log_data(date, time_str, data['soc'], data['wattsInSum'], data['wattsOutSum'])
-                        print(f"Data logged successfully in sheet 2 at {time_str}")
-
-                    # Switch logger after logging twice
-                    if current_second == target_second_2:
-                        print(f'{data, time_str}, 4')
-                        use_first_logger = not use_first_logger
-
+                    logger_1.log_data(date, time_str, data['soc'], data['wattsInSum'], data['wattsOutSum'])
+                    print(f"Data logged successfully in sheet 1 at {time_str}")
                 except Exception as e:
-                    print(f"Error: {e}")
-            else:
+                    print('im here -3-')
+                    print(f"Error logging to sheet 1: {e}")
+
+            # If current_second matches the second target second, log to the second sheet
+            if current_second == target_second_2:
+                try:
+                    data = ecoflow.get_data()
+                    date = current_time.strftime("%Y-%m-%d")
+                    time_str = current_time.strftime("%H:%M:%S")
+                    logger_2.log_data(date, time_str, data['soc'], data['wattsInSum'], data['wattsOutSum'])
+                    print(f"Data logged successfully in sheet 2 at {time_str}")
+                except Exception as e:
+                    print('im here -3-')
+                    print(f"Error logging to sheet 2: {e}")
+
+            if current_second not in (target_second_1, target_second_2):
                 print(f"Waiting... Current time: {current_time.strftime('%H:%M:%S')}")
         else:
-            print("Outside of operating hours (8 AM to 8 PM). Waiting...")
+            print("Outside of operating hours (5 AM to 8 PM). Waiting...")
 
         time.sleep(1)
 
