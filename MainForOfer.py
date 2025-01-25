@@ -41,8 +41,8 @@ class GoogleSheetLogger:
         self.sheet = self.client.open(sheet_name)
         self.current_worksheet = self.sheet.sheet1  # Use the first worksheet only
 
-    def log_data(self, date, time, soc, wattsInSum, wattsOutSum):
-        row = [date, time, soc, wattsInSum, wattsOutSum]
+    def log_data(self, date, time_str, soc, wattsInSum, wattsOutSum):
+        row = [date, time_str, soc, wattsInSum, wattsOutSum]
         self.current_worksheet.append_row(row)
 
 
@@ -68,40 +68,58 @@ def main():
         sheet_name='SolBazz_test_2'
     )
 
+    # This flag determines whether "10 -> first table" or "10 -> second table" in the current cycle
+    use_first_table_for_10 = True
+
     while True:
         current_time = datetime.now(pytz.timezone('Asia/Jerusalem'))
         current_hour = current_time.hour
-        current_minute = current_time.minute
         current_second = current_time.second
 
         # Ensure operation only within allowed hours
         if 5 <= current_hour < 20:
-            # If current_second matches the first target second, log to the first sheet
+            # If the second matches the first target, decide which table to log to
             if current_second == target_second_1:
                 try:
                     data = ecoflow.get_data()
                     date = current_time.strftime("%Y-%m-%d")
                     time_str = current_time.strftime("%H:%M:%S")
-                    logger_1.log_data(date, time_str, data['soc'], data['wattsInSum'], data['wattsOutSum'])
-                    print(f"Data logged successfully in sheet 1 at {time_str}")
+
+                    if use_first_table_for_10:
+                        logger_1.log_data(date, time_str, data['soc'], data['wattsInSum'], data['wattsOutSum'])
+                        print(f"10 -> Sheet 1 at {time_str}")
+                    else:
+                        logger_2.log_data(date, time_str, data['soc'], data['wattsInSum'], data['wattsOutSum'])
+                        print(f"10 -> Sheet 2 at {time_str}")
+
                 except Exception as e:
                     print('im here -3-')
-                    print(f"Error logging to sheet 1: {e}")
+                    print(f"Error logging on target_second_1: {e}")
 
-            # If current_second matches the second target second, log to the second sheet
+            # If the second matches the second target, decide which table to log to
             if current_second == target_second_2:
                 try:
                     data = ecoflow.get_data()
                     date = current_time.strftime("%Y-%m-%d")
                     time_str = current_time.strftime("%H:%M:%S")
-                    logger_2.log_data(date, time_str, data['soc'], data['wattsInSum'], data['wattsOutSum'])
-                    print(f"Data logged successfully in sheet 2 at {time_str}")
+
+                    if use_first_table_for_10:
+                        # If 10 was logged to first table, then 20 goes to second table
+                        logger_2.log_data(date, time_str, data['soc'], data['wattsInSum'], data['wattsOutSum'])
+                        print(f"20 -> Sheet 2 at {time_str}")
+                    else:
+                        # If 10 was logged to second table, then 20 goes to first table
+                        logger_1.log_data(date, time_str, data['soc'], data['wattsInSum'], data['wattsOutSum'])
+                        print(f"20 -> Sheet 1 at {time_str}")
+
+                    # After logging both 10 and 20 in this cycle, flip the flag
+                    # so next time the assignments reverse.
+                    use_first_table_for_10 = not use_first_table_for_10
+
                 except Exception as e:
                     print('im here -3-')
-                    print(f"Error logging to sheet 2: {e}")
+                    print(f"Error logging on target_second_2: {e}")
 
-            if current_second not in (target_second_1, target_second_2):
-                print(f"Waiting... Current time: {current_time.strftime('%H:%M:%S')}")
         else:
             print("Outside of operating hours (5 AM to 8 PM). Waiting...")
 
