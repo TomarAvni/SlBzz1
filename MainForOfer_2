@@ -1,0 +1,87 @@
+import time
+import requests
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+from datetime import datetime
+import pytz
+
+class EcoFlowAPI:
+    def __init__(self):
+        self.api_key = "2e3a969006b1436fad5e36877b6da053"
+        self.secret_key = "ffb0dd5edf3f49d2bd5481b34cd5068f"
+        self.serial_number = 'R611ZEB5XF2E0465'
+        self.base_url = 'https://api.ecoflow.com/iot-service/open/api/device/queryDeviceQuota'
+
+    def get_data(self):
+        """
+        Returns a dict containing only the relevant fields. We primarily need 'wattsInSum'.
+        """
+        url = f"{self.base_url}?sn={self.serial_number}"
+        headers = {
+            'appKey': self.api_key,
+            'secretKey': self.secret_key
+        }
+        response = requests.get(url, headers=headers)
+        print(f"Response Status Code: {response.status_code}")
+        print(f"Response Content: {response.text}")  # Debugging log
+        data = response.json()
+        if data.get('code') == '0' and 'data' in data:
+            return {
+                'wattsInSum': data['data'].get('wattsInSum', 'N/A')
+            }
+        else:
+            raise Exception(f"Failed to retrieve data: {data.get('message', 'Unknown error')}")
+
+
+class GoogleSheetLogger:
+    def __init__(self, credentials_file, sheet_name):
+        """
+        Initializes the client for Google Sheets.
+        """
+        scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+        creds = ServiceAccountCredentials.from_json_keyfile_name(credentials_file, scope)
+        self.client = gspread.authorize(creds)
+        self.sheet = self.client.open(sheet_name)
+        self.current_worksheet = self.sheet.sheet1  # Use the first worksheet only
+
+    def log_data(self, date_str, time_str, watts_in_sum):
+        """
+        Appends a new row to the sheet with date, time, and wattsInSum.
+        """
+        row = [date_str, time_str, watts_in_sum]
+        self.current_worksheet.append_row(row)
+
+
+def main():
+    """
+    Logs wattsInSum to a single sheet every minute.
+    """
+    ecoflow = EcoFlowAPI()
+    logger = GoogleSheetLogger(
+        credentials_file="solbazz3-afbe6ca17ca8.json",
+        sheet_name='SolBazz_test_3'  # Change if you want a different sheet
+    )
+
+    print("Starting to log wattsInSum once per minute...")
+    while True:
+        try:
+            current_time = datetime.now(pytz.timezone('Asia/Jerusalem'))
+            date_str = current_time.strftime("%Y-%m-%d")
+            time_str = current_time.strftime("%H:%M:%S")
+            
+            data = ecoflow.get_data()
+            watts_in = data['wattsInSum']
+            
+            # Log the data to the Google Sheet
+            logger.log_data(date_str, time_str, watts_in)
+            print(f"[{time_str}] Logged wattsInSum: {watts_in}")
+
+        except Exception as e:
+            print(f"Error during logging: {e}")
+
+        # Sleep for 60 seconds (adjust as needed)
+        time.sleep(60)
+
+
+if __name__ == "__main__":
+    main()
